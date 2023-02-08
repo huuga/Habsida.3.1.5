@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:font-weight="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+
+  <!--script for checkbox cheking-->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+  <!-- required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Admin panel</title>
+</head>
+<body>
+
+
+<!--header-->
+<header class="p-2 bg-dark">
+  <div class="row">
+    <div class="col-sm">
+      <span th:text="${principal.email}" class="h4 text-white pl-3 align-middle"></span>
+      <span class="text-white align-middle" style="font-size: x-large">with roles:</span>
+      <span th:each="role : ${principal.authorities}">
+                <span th:text="${role.authority.substring(5)}" style="font-size: x-large" class="text-white align-middle"></span>
+            </span>
+    </div>
+    <div class="col-sm text-right">
+      <div>
+        <a href="/logout" class="pr-2 align-middle text-muted" style="font-size: large">Logout</a>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<div class="row">
+
+
+  <!-- left nav menu-->
+  <div class="column  mt-3" style="width: 15rem">
+    <div class="bg-primary py-3 pl-4 w-100" style="border-radius: 5px">
+      <a th:href="@{/admin}" class="text-white ml-2">Admin</a>
+    </div>
+    <div class="py-3 pl-4 w-100" style="border-radius: 5px">
+      <a th:href="@{/user}" class="ml-2">User</a>
+    </div>
+  </div>
+
+
+  <!-- main window-->
+  <div class="col-sm p-4" style="height: 100vh; background: #effff2">
+    <h1>Admin panel</h1>
+
+    <!--nav tabs-->
+    <ul class="nav nav-tabs pt-2">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/admin}">Users table</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page"  th:href="@{/admin/add}">New User</a>
+      </li>
+    </ul>
+
+
+    <div class="border rounded bg-white pb-4">
+      <div class="p-3 rounded-top" style="background: #F7F7F7">
+        <span class="h5">Add new user</span>
+      </div>
+      <div class="container mt-3 text-center" style="max-width: 30rem">
+
+        <!--Form-->
+        <form th:action="@{/admin/add}" method="post">
+          <div class="form-group">
+            <label class="h5">First Name:</label>
+            <input type="text" class="form-control" name="firstName" placeholder="First Name">
+          </div>
+
+          <div class="form-group">
+            <label class="h5">Last Name:</label>
+            <input type="text" class="form-control" name="lastName" placeholder="Last Name">
+          </div>
+
+
+          <div class="form-group">
+            <label class="h5">Age:</label>
+            <input type="number" class="form-control" name="age" placeholder="Age" min="0" max="127" required>
+          </div>
+
+          <div class="form-group">
+            <label class="h5" >Email:</label>
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+
+          <div class="form-group">
+            <label class="h5" >Password:</label>
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+          </div>
+
+          <div class="form-group">
+            <label class="h5 mb-0">Roles:</label>
+            <p>(multiple is OK)</p>
+            <select multiple name="authorities" class="form-control" required>
+              <option th:each="role : ${roles_list}" th:value="${role}" th:text="${role.authority.substring(5)}">
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success btn-lg">Add new user</button>
+        </form>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

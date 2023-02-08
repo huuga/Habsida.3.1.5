@@ -22,10 +22,12 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String firstName;
+    private String lastName;
+    private byte age;
+    private String password;
 
     @Column(unique = true)
-    private String username;
-    private String password;
     private String email;
     private boolean isEnabled;
 
@@ -36,17 +38,19 @@ public class User implements UserDetails {
     private Set<Role> authorities = new HashSet<>();
 
 
-    public User(String username, String password, String email, Role... authorities) {
-        this.username = username;
+    public User(String firstName, String lastName, byte age, String password, String email, Role... authorities) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
         this.password = password;
         this.email = email;
-        isEnabled = true;
+        this.isEnabled = true;
         this.authorities.addAll(Arrays.asList(authorities));
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

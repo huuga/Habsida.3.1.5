@@ -30,9 +30,9 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   public User findUserByUsername(String username) {
-      TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
-      query.setParameter("username", username);
+   public User findUserByUsername(String email) {
+      TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
+      query.setParameter("email", email);
       try {
          return query.getSingleResult();
       } catch (NoResultException e) {

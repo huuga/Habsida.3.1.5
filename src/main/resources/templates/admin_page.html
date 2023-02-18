@@ -336,7 +336,7 @@
 </script>
 <script>
     async function getAllUsers() {
-        const res = await fetch('http://localhost:8080/getusers');
+        const res = await fetch('http://localhost:8080/admin/getusers');
         const users = await res.json();
 
         users.forEach(user => usersToHTML(user));

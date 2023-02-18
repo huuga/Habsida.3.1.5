@@ -29,7 +29,7 @@ public class UserController {
         this.userServiceImp = userServiceImp;
     }
 
-    @RequestMapping(value = "/start")
+    @GetMapping(value = "/start")
     public ModelAndView start() {
         User root = new User("Николай", "Петров", (byte) 30, "root",
                 "root@mail.ru", Role.ROLE_ADMIN, Role.ROLE_USER);
@@ -43,43 +43,6 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/admin")
-    public ModelAndView usersManage(Model model, Authentication authentication) {
-        Role[] rolesArr = Role.values();
-        model.addAttribute("roles_list", rolesArr);
-        model.addAttribute("principal", authentication.getPrincipal());
-        return new ModelAndView("admin_page");
-    }
-
-    @GetMapping(value = "/getusers")
-    public List<User> getUsers() {
-        return userServiceImp.getUsersList();
-    }
-
-
-    @PostMapping("/admin")
-    public ResponseEntity saveNewUser(@RequestBody User newUser) {
-        try{
-            newUser.setEnabled(true);
-            userServiceImp.addUser(newUser);
-            ResponseEntity<User> response = new ResponseEntity<>(userServiceImp.findUserByUsername(newUser.getEmail()), HttpStatus.CREATED);
-            return response;
-        } catch (DataIntegrityViolationException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-
-
-    @PatchMapping("/admin")
-    public User editUser(@RequestBody User editedUser) {
-        if (editedUser.getPassword().equals("")) {
-            User user = userServiceImp.findUserById(editedUser.getId());
-            editedUser.setPassword(user.getPassword());
-        }
-        userServiceImp.updateUser(editedUser);
-        return userServiceImp.findUserById(editedUser.getId());
-    }
-
     @GetMapping("/logout")
     public ModelAndView logout(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -90,17 +53,7 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/admin")
-    public ResponseEntity deleteUser(@RequestBody String id) throws ParseException {
-        LinkedHashMap<String, Object> jsonObject = new JSONParser(id).parseObject();
-        String strId = (String) jsonObject.get("id");
-        try {
-            userServiceImp.removeUser(Long.parseLong(strId));
-            return ResponseEntity.noContent().build();
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+
 
     @GetMapping("/user")
     public ModelAndView usersPage(Principal principal, Model model) {

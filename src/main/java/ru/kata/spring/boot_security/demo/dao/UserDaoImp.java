@@ -15,6 +15,9 @@ public class UserDaoImp implements UserDao {
    @Override
    public List<User> getUsersList() {
       Query query = em.createQuery("SELECT u FROM User u");
+      EntityGraph<User> entityGraph = em.createEntityGraph(User.class);
+      entityGraph.addAttributeNodes("authorities");
+      query.setHint("javax.persistence.fetchgraph", entityGraph);
       return query.getResultList();
    }
 
